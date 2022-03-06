@@ -16,8 +16,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(20);
-        return view('admin.posts.index', compact('posts'));
+        $posts = Post::orderBy('created_at', 'desc')->paginate(20);
+        return view('admin.posts.index', ['posts' => $posts]);
     }
 
     /**
@@ -45,15 +45,16 @@ class PostController extends Controller
 
         $data = $request->all();
 
-        $slug = Str::slug($data['title'], '-');
-        $postPresente = Post::where('slug', $slug)->first(); //controllo se lo slug e'univoco
+        // $slug = Str::slug($data['title'], '-');
+        // $postPresente = Post::where('slug', $slug)->first(); //controllo se lo slug e'univoco
 
-        $counter = 0;
-        while ($postPresente){
-            $slug = $slug . '-' . $counter;
-            $postPresente = Post::where('slug', $slug)->first();
-            $counter++;
-        }
+        // $counter = 0;
+        // while ($postPresente){
+        //     $slug = $slug . '-' . $counter;
+        //     $postPresente = Post::where('slug', $slug)->first();
+        //     $counter++;
+        // }
+        $slug= Post::createSlug($data['title']);
 
         $newPost = new Post();
         
@@ -72,7 +73,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        dd($post);
+        return view('admin.posts.show', ['post' => $post]);
     }
 
     /**
@@ -81,9 +82,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        // return view('admin.posts.show', ['post' => $post]);
     }
 
     /**
@@ -104,8 +105,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('admin.posts.index')->with('status', "Post id $post->id cancellato");
     }
 }

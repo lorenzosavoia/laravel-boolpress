@@ -3,11 +3,24 @@
 @section('content')
 <div class="container">
     <div class="row">
+        @if (session('status'))
+            <div class="alert alert-danger">
+                {{ session('stauts') }}
+            </div>
+        @endif
+    </div>
+    <div class="row">
+        <div class="col">
+            <h1>
+                Create new post
+            </h1>
+        </div>
+    </div>
+    <div class="row">
         <div class="col">
             <form action="{{ route('admin.posts.store') }}" method="post">
             @csrf 
             @method('POST')
-
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
