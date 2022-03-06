@@ -20,7 +20,7 @@ class Post extends Model
 
     public function tags() //relazione many to many tra post e tag verso il model di tag
     {
-        return $this->belongsTo('App\Model\Tag')->withTimestamps();
+        return $this->belongsToMany('App\Model\Tag')->withTimestamps();
     }
 
     /**
