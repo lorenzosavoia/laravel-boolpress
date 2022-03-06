@@ -44,4 +44,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Model\Post');
     }
+    public function roles()//creo relazione many to many verso role
+    {
+        return $this->belongsToMany('App\Model\Role');
+    }
 }
