@@ -18,6 +18,11 @@ class Post extends Model
         return $this->belongsTo('App\user');
     }
 
+    public function tags() //relazione many to many tra post e tag verso il model di tag
+    {
+        return $this->belongsTo('App\Model\Tag')->withTimestamps();
+    }
+
     /**
      * Get the route key for the model.
      *
