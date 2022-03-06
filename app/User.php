@@ -36,8 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function userInfo() // faccio relazione one to one con model
+    public function userInfo() // faccio relazione one to one con model userinfo
     {
         return $this->hasOne('App\Model\UserInfo');
+    }
+    public function posts() //creo relazione one to many col model di post 
+    {
+        return $this->hasMany('App\Model\Post');
     }
 }

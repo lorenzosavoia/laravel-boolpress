@@ -12,7 +12,7 @@
     <div class="row">
         <div class="col">
             <h1>
-                Create new post
+                Create new post with profile: {{ Auth::user()->name }}
             </h1>
         </div>
     </div>
@@ -35,6 +35,7 @@
                 <label for="content" class="form-label">Content</label>
                 <textarea class="form-control" id="content" rows="3" name="content"> {{ old('content') }} </textarea>
             </div>
+            <input type="hidden" name="user_id" id="user_id" value="{{ Auth::user()->id }}">
             @error('content')
                 <div class="alert alert-danger">
                     {{ $message }}

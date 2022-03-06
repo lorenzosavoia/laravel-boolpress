@@ -38,12 +38,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->all();
+        // facciamo controllo per non permettere ad untenti con id diverso di modificare creare ecc
+        if (Auth::user()->id != $data['user_id']) {
+            abort('404');
+        }
         $validateData = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
+            
         ]);
 
-        $data = $request->all();
 
         // $slug = Str::slug($data['title'], '-');
         // $postPresente = Post::where('slug', $slug)->first(); //controllo se lo slug e'univoco

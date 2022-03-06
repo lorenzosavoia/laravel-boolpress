@@ -10,8 +10,13 @@ class Post extends Model
     protected $fillable = [
         'title',
         'content',
-        'slug'
+        'slug',
+        'user_id'
     ];
+    public function user() // creo relazione one to many verso dal model di post verso user
+    {
+        return $this->belongsTo('App\user');
+    }
 
     /**
      * Get the route key for the model.
