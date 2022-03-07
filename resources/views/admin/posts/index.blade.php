@@ -5,7 +5,7 @@
      <div class="row">
         @if (session('status'))
             <div class="alert alert-danger">
-                {{ session('stauts') }}
+                {{ session('status') }}
             </div>
         @endif
     </div>

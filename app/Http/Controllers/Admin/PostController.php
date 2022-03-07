@@ -142,6 +142,14 @@ class PostController extends Controller
         //update del salvataggio su database
         $post->update();
 
+        if (!empty($data['tags'])) {
+            // sincronizza i tag. Cancella quelli vecchi e aggiunge quelli nuovi nella tabella(DB)
+            $post->tags()->sync($data['tags']);
+        } else {
+            //se non abbiamo tag selezionati fa il detach
+            $post->tags()->detach();
+        }
+
         return redirect()->route('admin.posts.show', $post);
     }
     

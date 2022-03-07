@@ -21,10 +21,5 @@
             {{$post->content}}
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            {{$post->tags}}
-        </div>
-    </div>
 </div>
 @endsection
