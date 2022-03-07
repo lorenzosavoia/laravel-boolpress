@@ -154,6 +154,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // validazione per vedere se sono lo stesso utente del post oppure un admin
+        if (Auth::user()->id != $post->user_id && !Auth::user()->roles()->get()->contains(1)) {
+            abort('403');
+        }
+
+        $post->tags()->detach();
         $post->delete();
         return redirect()->route('admin.posts.index')->with('status', "Post id $post->id cancellato");
     }
