@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Model\Post;
+use App\Model\Tag;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use illuminate\Support\Str;
@@ -27,7 +28,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $tags= Tag::all(); // richiamo tutti i tag
+        return view('admin.posts.create', ['tags'=> $tags]);
     }
 
     /**
@@ -46,7 +48,7 @@ class PostController extends Controller
         $validateData = $request->validate([
             'title' => 'required|max:255',
             'content' => 'required',
-            
+            'tags.*' => 'exists:App\Model\Tag,id' //controllo su un array per vedere se gli elementi esistono 
         ]);
 
 
@@ -62,10 +64,14 @@ class PostController extends Controller
         $slug= Post::createSlug($data['title']);
 
         $newPost = new Post();
-        
         $newPost->fill($data);
         $newPost->slug = $slug;
         $newPost->save();
+
+        //controllo per vedere se tags é riempito 
+        if(!empty($data['tags'])){
+            $newPost->tags()->attach($data['tags']);
+        }
 
         return redirect()->route('admin.posts.show', ['post' => $newPost]);
     }

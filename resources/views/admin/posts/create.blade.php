@@ -41,6 +41,28 @@
                     {{ $message }}
                 </div>
             @enderror
+
+               {{-- giro sull'array che mi sono passato tramite il post controller  --}}
+            <fieldset>
+                <legend>Tags</legend>
+                @foreach ($tags as $tag) 
+                <div class="form-check">
+                    {{-- scrivo nel name tags[] perché passo piu elementi alla store che cosi me li raggruppa  --}}
+                    <input class="form-check-input" type="checkbox" value="{{ $tag->id }}" name="tags[]"
+                    {{-- ternario per lasciare la checkbox ceccata durante l'errore --}}
+                    {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}
+                    >
+                    <label class="form-check-label" for="flexCheckDefault">
+                        {{ $tag->name }}
+                    </label>
+                </div>
+                @endforeach
+            </fieldset>
+            @error('tags.*')
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div>
+            @enderror
             
             <input type="submit" value="Salva">
             </form>
