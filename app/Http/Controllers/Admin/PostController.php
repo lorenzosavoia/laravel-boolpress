@@ -95,7 +95,14 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        // return view('admin.posts.show', ['post' => $post]);
+        //if per vedere se sono l'autore del post o no 
+        if (Auth::user()->id != $post->user_id && !Auth::user()->roles()->get()->contains(1)) {
+            abort('403');
+        }
+
+        $tags = Tag::all(); // richiamo i tag
+
+        return view('admin.posts.edit', ['post' => $post, 'tags' => $tags]);
     }
 
     /**
@@ -105,10 +112,39 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        $data = $request->all();
+
+        //if per vedere se sono l'autore del post o no 
+        if (Auth::user()->id != $post->user_id && !Auth::user()->roles()->get()->contains(1)) {
+            abort('403');
+        }
+        //validazione dati 
+        $postValidate = $request->validate(
+            [
+                'title' => 'required|max:240',
+                'content' => 'required',
+                'tags.*' => 'nullable|exists:App\Model\Tag,id',
+            ]
+        );
+
+
+        //controlliamo se i $data sono stati cambiati
+        if ($data['title'] != $post->title) {
+            $post->title = $data['title'];
+            $post->slug = $post->createSlug($data['title']);
+        }
+        if ($data['content'] != $post->content) {
+            $post->content = $data['content'];
+        }
+
+        //update del salvataggio su database
+        $post->update();
+
+        return redirect()->route('admin.posts.show', $post);
     }
+    
 
     /**
      * Remove the specified resource from storage.
